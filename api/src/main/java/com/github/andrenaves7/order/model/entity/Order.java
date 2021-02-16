@@ -9,7 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
@@ -36,10 +37,9 @@ public class Order {
 	@Column(nullable = false)
 	private OrderStatus orderStatus;
 	
-	@Column(nullable = false)
-	@OneToMany
-	@JoinColumn(name="order_id")
-	private List<Item> itens;
+	@ManyToMany
+	@JoinTable(name = "od_order_product", joinColumns = @JoinColumn(name = "order_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
+	private List<Product> itens;
 	
 	@PrePersist
 	public void prePersist() {

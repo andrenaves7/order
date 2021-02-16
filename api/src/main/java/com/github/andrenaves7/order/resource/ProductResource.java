@@ -16,29 +16,29 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.github.andrenaves7.order.model.entity.Item;
-import com.github.andrenaves7.order.model.repository.ItemRepository;
+import com.github.andrenaves7.order.model.entity.Product;
+import com.github.andrenaves7.order.model.repository.ProductRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/item")
+@RequestMapping("/product")
 @RequiredArgsConstructor
 @CrossOrigin("*")
-public class ItemResource {
+public class ProductResource {
 
 	@Autowired
-	private final ItemRepository repository;
+	private final ProductRepository repository;
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Item save(@RequestBody Item item) {
+	public Product save(@RequestBody Product item) {
 		return this.repository.save(item);
 	}
 
 	@PutMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void update(@PathVariable Long id, @RequestBody Item updatedItem) {
+	public void update(@PathVariable Long id, @RequestBody Product updatedItem) {
 		this.repository.findById(id).map(item -> {
 			updatedItem.setId(id);
 			return this.repository.save(updatedItem);
@@ -52,12 +52,12 @@ public class ItemResource {
 	}
 
 	@GetMapping
-	public List<Item> list() {
+	public List<Product> list() {
 		return this.repository.findAll();
 	}
 
 	@GetMapping("{id}")
-	public Item listById(@PathVariable Long id) {
+	public Product listById(@PathVariable Long id) {
 		return this.repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 }
