@@ -10,9 +10,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.github.andrenaves7.order.model.enums.OrderStatus;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,11 +29,20 @@ public class Order {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column
+	@Column(nullable = false)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
 	private LocalDate createdAt;
 	
+	@Column(nullable = false)
+	private OrderStatus orderStatus;
+	
+	@Column(nullable = false)
 	@OneToMany
 	@JoinColumn(name="order_id")
 	private List<Item> itens;
+	
+	@PrePersist
+	public void prePersist() {
+		this.createdAt = LocalDate.now();
+	}
 }
